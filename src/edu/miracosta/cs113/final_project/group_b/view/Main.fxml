@@ -17,8 +17,8 @@
    <right>
       <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
-            <ComboBox fx:id="graphPicker" centerShape="false" prefWidth="150.0" promptText="Select Graph" />
-            <ComboBox fx:id="algorithmPicker" prefWidth="150.0" promptText="Algorithm" />
+            <ComboBox centerShape="false" onAction="#selectGraph" prefWidth="150.0" promptText="Select Graph" />
+            <ComboBox onAction="#selectAlgorithm" prefWidth="150.0" promptText="Algorithm" />
             <VBox alignment="CENTER">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Play Speed" />
@@ -27,13 +27,13 @@
             </VBox>
             <HBox alignment="CENTER" spacing="10.0">
                <children>
-                  <ToggleButton fx:id="stopButton" mnemonicParsing="false" selected="true" text="Stop">
+                  <ToggleButton mnemonicParsing="false" onAction="#handleStop" selected="true" text="Stop">
                      <toggleGroup>
                         <ToggleGroup fx:id="playToggleGroup" />
                      </toggleGroup>
                   </ToggleButton>
-                  <ToggleButton fx:id="stepButton" mnemonicParsing="false" text="Step" toggleGroup="$playToggleGroup" />
-                  <ToggleButton fx:id="playButton" mnemonicParsing="false" text="Play" toggleGroup="$playToggleGroup" />
+                  <ToggleButton mnemonicParsing="false" onAction="#handleStep" text="Step" toggleGroup="$playToggleGroup" />
+                  <ToggleButton mnemonicParsing="false" onAction="#handlePlay" text="Play" toggleGroup="$playToggleGroup" />
                </children>
             </HBox>
          </children>
