@@ -5,13 +5,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- * Based on <a href="http://stackoverflow.com/a/35202191">this stack overflow answer</a>.
+ * Based on <a href="http://stackoverflow.com/a/35202191">this stack overflow
+ * answer</a>.
  * 
  * @author user458577 on StackOverflow
  *
  */
 public class ResizeToParentImageView extends ImageView
-
 {
 	public ResizeToParentImageView ()
 	{
