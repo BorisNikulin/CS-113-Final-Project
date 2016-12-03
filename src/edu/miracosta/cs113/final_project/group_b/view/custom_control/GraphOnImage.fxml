@@ -2,6 +2,7 @@
 
 <?import javafx.scene.Group?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
 <?import edu.miracosta.cs113.final_project.group_b.view.custom_control.ResizeToParentImageView?>
@@ -9,6 +10,6 @@
 <fx:root type="StackPane" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1">
 	 <children>
 	    <ResizeToParentImageView fx:id="imageView" />
-	    <Group fx:id="graphGroup" />
+	    <Pane fx:id="graphPane" />
 	 </children>
 </fx:root>

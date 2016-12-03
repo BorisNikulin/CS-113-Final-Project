@@ -5,16 +5,21 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 // TODO make this class genericy with allowing graphs that do not use Point2D but force the addition of a function that when applied on the vertex gives back a Point2D
+
+/**
+ * @author Boris
+ *
+ */
 public class GraphOnImage extends StackPane
 {
-	@FXML private Group						graphGroup;
+	@FXML private Pane						graphPane;
 	@FXML private ResizeToParentImageView	imageView;
 
 	public GraphOnImage ()
@@ -47,15 +52,15 @@ public class GraphOnImage extends StackPane
 //
 		for (int i = 1; i <= 200; i += 10)
 		{
-			Circle circle1 = new Circle(i, i, 5);
-			Circle circle2 = new Circle(100 - i, i, 5);
-			graphGroup.getChildren().add(circle1);
-			graphGroup.getChildren().add(circle2);
+			Circle circle1 = new Circle(i, i, 5,Color.YELLOW);
+			Circle circle2 = new Circle(100 - i, i, 5, Color.CYAN);
+			graphPane.getChildren().add(circle1);
+			graphPane.getChildren().add(circle2);
 		}
 		
 		Circle circleStart = new Circle(0, 0, 5, Color.GREEN);
 		Circle circleEnd = new Circle(200, 200, 5, Color.RED);
-		graphGroup.getChildren().add(circleStart);
-		graphGroup.getChildren().add(circleEnd);
+		graphPane.getChildren().add(circleStart);
+		graphPane.getChildren().add(circleEnd);
 	}
 }
