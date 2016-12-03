@@ -25,6 +25,7 @@ public class Main extends Application
 		primaryStage.setScene(new Scene(root));
 		
 		primaryStage.setTitle("TODO Make a title of some sort");
+		
 		primaryStage.show();
 	}
 

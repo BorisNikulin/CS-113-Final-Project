@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -16,7 +18,7 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.miracosta.cs113.final_project.group_b.controller.MainController">
    <right>
-      <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" fillWidth="false" spacing="20.0" BorderPane.alignment="CENTER">
          <children>
             <ComboBox centerShape="false" onAction="#selectGraph" prefWidth="150.0" promptText="Select Graph" />
             <ComboBox onAction="#selectAlgorithm" prefWidth="150.0" promptText="Algorithm" />
@@ -38,9 +40,12 @@
                </children>
             </HBox>
          </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
       </VBox>
    </right>
    <center>
-		<GraphOnImage fx:id="graphOnImage"/>
+    <GraphOnImage />
    </center>
 </BorderPane>
