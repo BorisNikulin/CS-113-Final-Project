@@ -5,6 +5,8 @@
 
 # Package Files #
 *.jar
+# Exception for jars in the lib folder
+!/lib/*.jar
 *.war
 *.ear
 
