@@ -2,15 +2,23 @@
 package edu.miracosta.cs113.final_project.group_b.view.custom_control;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.function.Function;
 
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.MapProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleSetProperty;
+import javafx.collections.ObservableSet;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -28,6 +36,13 @@ public class GraphOnImage extends StackPane
 	@FXML private Pane						graphPane;
 	@FXML private ResizeToParentImageView	imageView;
 
+	private ObjectProperty<Object> mousedOverVertex = new SimpleObjectProperty<Object>(this, "mousedOverVertex", null);
+	private SetProperty<Object> selectedVertices = new SimpleSetProperty<>(this, "selectedVertices");
+	//TODO use css api to make vertex size stylable through css
+	private DoubleProperty vertexRadius = new SimpleDoubleProperty(this, "vertexSize", 20);
+	
+	private MapProperty<Circle, Object> circleToVertex = new SimpleMapProperty<>(this, "circleToVertex");
+	private MapProperty<Object, Circle> vertexToCircle = new SimpleMapProperty<>(this, "vertexToCircle");
 	private ObjectProperty<Bounds>			initBounds	= new SimpleObjectProperty<Bounds>(this, "initBounds");
 	private DoubleProperty					widthRatio	= new SimpleDoubleProperty(this, "widthRatio");
 	private DoubleProperty					heightRatio	= new SimpleDoubleProperty(this, "heightRatio");
@@ -95,39 +110,9 @@ public class GraphOnImage extends StackPane
 			Circle circle1 = new Circle(i, i, 5,Color.YELLOW);
 			Circle circle2 = new Circle(500 - i, i, 5, Color.CYAN);
 			
-			DoubleBinding circleBind1x = new DoubleBinding()
-			{
-				{
-					super.bind(imageView.boundsInLocalProperty(), widthRatio);
-				}
-				@Override
-				protected double computeValue()
-				{
-					return x1 * widthRatio.doubleValue();
-				}
-			};
-			DoubleBinding circleBind1y = new DoubleBinding()
-			{
-				{
-					super.bind(imageView.boundsInLocalProperty(), heightRatio);
-				}
-				@Override
-				protected double computeValue()
-				{
-					return y1 * heightRatio.doubleValue();
-				}
-			};
-			DoubleBinding circleBind2x = new DoubleBinding()
-			{
-				{
-					super.bind(imageView.boundsInLocalProperty(), widthRatio);
-				}
-				@Override
-				protected double computeValue()
-				{
-					return x2 * widthRatio.doubleValue();
-				}
-			};
+			DoubleBinding circleBind1x = createHorizontalFixation(x1);
+			DoubleBinding circleBind1y = createVerticalFixation(y1);
+			DoubleBinding circleBind2x = createHorizontalFixation(x2);
 
 			circle1.centerXProperty().bind(circleBind1x);
 			circle1.centerYProperty().bind(circleBind1y);
@@ -183,4 +168,92 @@ public class GraphOnImage extends StackPane
 		graphPane.getChildren().add(circleStart);
 		graphPane.getChildren().add(circleEnd);
 	}
+	
+	public void addVertex(Object vertex, Collection<Object> adjacent, Function<Object, Point2D> vertexToPoint)
+	{
+		if(!vertexToCircle.containsKey(vertex))
+		{
+			
+		}
+	}
+	
+	private DoubleBinding createHorizontalFixation(final double x)
+	{
+		return new DoubleBinding()
+		{
+			{
+				super.bind(imageView.boundsInLocalProperty(), widthRatio);
+			}
+			@Override
+			protected double computeValue()
+			{
+				return x * widthRatio.doubleValue();
+			}
+		};
+	}
+	
+	private DoubleBinding createVerticalFixation(final double y)
+	{
+		return new DoubleBinding()
+		{
+			{
+				super.bind(imageView.boundsInLocalProperty(), heightRatio);
+			}
+			@Override
+			protected double computeValue()
+			{
+				return y * heightRatio.doubleValue();
+			}
+		};
+	}
+	
+	public ObjectProperty<Image> imageProperty()
+	{
+		return imageView.imageProperty();
+	}
+	
+	public final Image getImage()
+	{
+		return imageView.imageProperty().get();
+	}
+	
+	public final void setImage(Image image)
+	{
+		imageView.imageProperty().set(image);
+	}
+	
+	public SetProperty<Object> selectedVerticesProperty()
+	{
+		return selectedVertices;
+	}
+	
+	public final ObservableSet<Object> getSelectedVertices()
+	{
+		return selectedVertices.get();
+	}
+	
+	public ObjectProperty<Object> mousedOverVertexProperty()
+	{
+		return mousedOverVertex;
+	}
+	
+	public final Object getMousedOverVertex()
+	{
+		return mousedOverVertex.get();
+	}
+	public DoubleProperty vertexRadiuProperty()
+	{
+		return vertexRadius;
+	}
+	
+	public final double getVertexRadiu()
+	{
+		return vertexRadius.doubleValue();
+	}
+	
+	public final void setVertexRadiu(double radius)
+	{
+		vertexRadius.set(radius);
+	}
 }
+//vertexSize
