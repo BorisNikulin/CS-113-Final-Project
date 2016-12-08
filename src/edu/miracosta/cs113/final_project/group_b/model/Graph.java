@@ -75,8 +75,8 @@ public class Graph<V> {
      *         exist in Graph)
      */
     public boolean addEdge(V source, V destination, double weight) {
-    	LinkedList<Edge<V>> sourceList = edges.get(source.hashCode());
-    	LinkedList<Edge<V>> destList = edges.get(source.hashCode());
+    	LinkedList<Edge<V>> sourceList = edges.get(source);
+    	LinkedList<Edge<V>> destList = edges.get(destination);
     	
     	// If one or both vertices do not exist:
     	if (sourceList == null || destList == null) {
@@ -84,7 +84,7 @@ public class Graph<V> {
     	}
     	
         // Check to make sure edge doesn't already exist
-        if (!isEdge(source, destination)) {
+        if (isEdge(source, destination)) {
         	return false;
         }
         
@@ -105,8 +105,8 @@ public class Graph<V> {
      * @return True if edge existed in Graph and was successfully removed
      */
     public boolean removeEdge(V source, V destination) {
-    	LinkedList<Edge<V>> sourceList = edges.get(source.hashCode());
-    	LinkedList<Edge<V>> destList = edges.get(source.hashCode());
+    	LinkedList<Edge<V>> sourceList = edges.get(source);
+    	LinkedList<Edge<V>> destList = edges.get(destination);
     	
     	// If one or both vertices do not exist:
     	if (sourceList == null || destList == null) {
@@ -131,8 +131,8 @@ public class Graph<V> {
      * 	       source list contains Edge
      */
     public boolean isEdge(V source, V destination) {
-    	LinkedList<Edge<V>> sourceList = edges.get(source.hashCode());
-    	LinkedList<Edge<V>> destList = edges.get(source.hashCode());
+    	LinkedList<Edge<V>> sourceList = edges.get(source);
+    	LinkedList<Edge<V>> destList = edges.get(destination);
     	
     	// If one or both vertices do not exist:
     	if (sourceList == null || destList == null) {
@@ -154,7 +154,7 @@ public class Graph<V> {
      * @return The edge linked the specified vertices, or null if not found
      */
     public Edge<V> getEdge(V source, V destination) {
-    	LinkedList<Edge<V>> sourceList = edges.get(source.hashCode());
+    	LinkedList<Edge<V>> sourceList = edges.get(source);
     	Edge<V> target = new Edge<V>(source, destination);
     	for (Edge<V> edge : sourceList) {
     		if (edge.equals(target)) {

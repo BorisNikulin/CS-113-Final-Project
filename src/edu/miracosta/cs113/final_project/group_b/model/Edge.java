@@ -98,8 +98,8 @@ public class Edge<V> {
             return false;
         }
         Edge<V> other = (Edge<V>) o;
-        if (this.source == other.source &&
-            this.destination == other.destination) {
+        if (this.getSource().equals(other.getSource()) &&
+            this.getDestination().equals(other.getDestination())) {
             return true;
         }
         return false;
