@@ -55,7 +55,8 @@ public class GraphTest
 		Point end = new Point(99, 99);
 		graphReader = new GraphUtility<Point>("src\\edu\\miracosta\\cs113\\final_project\\group_b\\model\\test\\astartest.txt");
 		testGraph = graphReader.getGraph();
-		algorithm = new AStar<Point>(testGraph, start);
+		algorithm = new AStar<Point>(testGraph, start, (a, b) -> Math.abs(a.getX() - b.getX()) +
+				                                                 Math.abs(a.getY() - b.getY()));
 		algorithm.getPathTo(end);
 		algorithm.printPath(end);
 	}

@@ -1,11 +1,11 @@
 package edu.miracosta.cs113.final_project.group_b.model;
 
-import java.awt.Point;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Stack;
+import java.util.function.ToDoubleBiFunction;
 
 /**
  * AStar.java: Creates an AStar object that initializes the data structures
@@ -20,7 +20,8 @@ public class AStar<V> {
 	PriorityQueue<VertexPriority<V>> frontier; // Vertices not yet evaluated
 	Map<V, Double> costSoFar;                  // Pairs vertices with their total path costs from start
 	Map<V, V> cameFrom;                        // Pairs vertices with their immediate predecessor
-	Graph<V> theGraph;                         // Graph to find path from start to goal
+	Graph<V> graph;                            // Graph to find path from start to goal
+	ToDoubleBiFunction<V, V> heuristic;
 	
 	/**
 	 * Initializes all data structures needed for AStar algorithm.
@@ -30,8 +31,9 @@ public class AStar<V> {
 	 * @param start
 	 *        Beginning vertex from which to find path
 	 */
-	public AStar(Graph<V> graph, V start) {
-		theGraph = graph;
+	public AStar(Graph<V> graph, V start, ToDoubleBiFunction<V, V> heuristic) {
+		this.heuristic = heuristic;
+		this.graph = graph;
 		costSoFar = new HashMap<V, Double>();
 		cameFrom = new HashMap<V, V>();
 		frontier = new PriorityQueue<VertexPriority<V>>();
@@ -60,7 +62,7 @@ public class AStar<V> {
 				return;                                        // End search early once goal has been reached
 			}
 
-			adjacentEdges = theGraph.getEdges(current.getVertex());
+			adjacentEdges = graph.getEdges(current.getVertex());
 			
 			for (Edge<V> edge : adjacentEdges) {
 				next = edge.getDestination();                   // Get next adjacent edge & cost between current & next
@@ -69,7 +71,8 @@ public class AStar<V> {
 				if (!costSoFar.containsKey(next) ||             // If cost has not been found for next vertex 
 					newCost < costSoFar.get(next)) {            // Or new calculated cost is smaller
 					costSoFar.put(next, newCost);               // Replace cost with newer, smaller cost
-					priority = newCost + heuristic(goal, next); // Calculate priority for next vertex, add to frontier
+					                                            // Calculate priority for next vertex, add to frontier
+					priority = newCost + heuristic.applyAsDouble(goal, next);					
 					frontier.offer(new VertexPriority<V>(next, priority));
 					cameFrom.put(next, current.getVertex());    // Record next vertex's predecessor (current vertex)
 				}
@@ -97,21 +100,5 @@ public class AStar<V> {
 			System.out.print(path.pop() + " --> ");
 		}
 		System.out.print(goal);
-	}
-	
-	/**
-	 * Temporary heuristic method (currently assumes vertex is a Point object
-	 * and uses coordinates to calculate heuristic value with Manhattan method.
-	 * @param goal
-	 *        End vertex
-	 * @param start
-	 *        Current vertex being evaluated
-	 * @return A value used to guess which vertex in frontier will be most
-	 *         useful to explore next
-	 */
-	private double heuristic(V goal, V start) {
-		Point a = (Point) goal;
-		Point b = (Point) start;
-		return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 	}
 }
