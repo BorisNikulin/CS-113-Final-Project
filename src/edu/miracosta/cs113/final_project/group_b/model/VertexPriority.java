@@ -1,7 +1,7 @@
 package edu.miracosta.cs113.final_project.group_b.model;
 
 /**
- * VertexPriority.java: Pairs a vertex with it's priority value for the
+ * VertexPriority.java: Pairs a vertex with its priority value for the
  * ASTar frontier PriorityQueue used to choose the next best vertex.
  * 
  * @author Marina Mizar

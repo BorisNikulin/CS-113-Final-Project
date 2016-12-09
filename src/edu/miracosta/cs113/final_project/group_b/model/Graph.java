@@ -27,6 +27,15 @@ public class Graph<V> {
     }
     
     /**
+     * Gets number of vertices currently in graph.
+     * 
+     * @return Number of vertices
+     */
+    public int getNumVertices() {
+    	return vertices;
+    }
+    
+    /**
      * Adds vertex to graph by putting it in the map that links
      * vertices to edges. Increments vertex counter.
      * 
@@ -59,6 +68,7 @@ public class Graph<V> {
     	
     	// Then remove vertex from map
     	edges.remove(vertex);
+    	vertices--;
     }
 
     /**
