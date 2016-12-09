@@ -5,7 +5,16 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 import java.util.function.ToDoubleBiFunction;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleMapProperty;
+import javafx.collections.FXCollections;
 
 /**
  * AStar.java: Creates an AStar object that initializes the data structures
@@ -17,11 +26,28 @@ import java.util.function.ToDoubleBiFunction;
  */
 public class AStar<V> {
 	
-	PriorityQueue<VertexPriority<V>> frontier; // Vertices not yet evaluated
-	Map<V, Double> costSoFar;                  // Pairs vertices with their total path costs from start
-	Map<V, V> cameFrom;                        // Pairs vertices with their immediate predecessor
-	Graph<V> graph;                            // Graph to find path from start to goal
-	ToDoubleBiFunction<V, V> heuristic;
+	private PriorityQueue<VertexPriority<V>> frontier; // Vertices not yet evaluated
+	private Map<V, Double> costSoFar;                  // Pairs vertices with their total path costs from start
+	private MapProperty<V, V> cameFrom = new SimpleMapProperty<>(this, "cameFrom", FXCollections.observableHashMap());                        // Pairs vertices with their immediate predecessor
+	private Graph<V> graph;                            // Graph to find path from start to goal
+	private ToDoubleBiFunction<V, V> heuristic;
+	private DoubleProperty sleep = new SimpleDoubleProperty(this, "sleep", 0);
+//	private ReadOnlyObjectProperty<V> start = new SimpleReadOnlyObjectProperty();
+	private BooleanProperty isPlay = new SimpleBooleanProperty(this, "isPlay", false);
+	private TimeUnit timeUnit = TimeUnit.MILLISECONDS;
+	
+	{
+		try {
+			Thread.sleep(timeUnit.toMillis((long) sleep.get()));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+		
+		
+		// or no time unit and assume milliseconds
+	}
 	
 	/**
 	 * Initializes all data structures needed for AStar algorithm.
@@ -35,9 +61,9 @@ public class AStar<V> {
 		this.heuristic = heuristic;
 		this.graph = graph;
 		costSoFar = new HashMap<V, Double>();
-		cameFrom = new HashMap<V, V>();
+//		cameFrom = new HashMap<V, V>();
 		frontier = new PriorityQueue<VertexPriority<V>>();
-		cameFrom.put(start, null);             // Add first vertex (no predecessor)
+		cameFrom.get().put(start, null);             // Add first vertex (no predecessor)
 		costSoFar.put(start, 0.0);             // Add first vertex (no path cost yet)
 		frontier.add(new VertexPriority<V>(start, 0));
 	}
@@ -100,5 +126,20 @@ public class AStar<V> {
 			System.out.print(path.pop() + " --> ");
 		}
 		System.out.print(goal);
+	}
+	
+	public DoubleProperty sleepProperty()
+	{
+		return sleep;
+	}
+	
+	public final double getSleep()
+	{
+		return sleep.doubleValue();
+	}
+	
+	public final void setDouble(double value)
+	{
+		sleep.set(value);
 	}
 }

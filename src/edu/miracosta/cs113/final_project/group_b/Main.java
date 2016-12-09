@@ -20,7 +20,12 @@ public class Main extends Application
 	@Override
 	public void start(Stage primaryStage) throws IOException
 	{
-		Parent root = FXMLLoader.load(getClass().getResource("view/Main.fxml"));
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Main.fxml"));
+		MainController controller = loader.getController();
+		controller.Astar = new ASTAR;
+				new Grap;
+				contro;;er. graph = grap;
+		Parent root = loader.load();
 		
 		primaryStage.setScene(new Scene(root));
 		

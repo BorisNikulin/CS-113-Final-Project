@@ -1,8 +1,11 @@
 
 package edu.miracosta.cs113.final_project.group_b.controller;
 
+import edu.miracosta.cs113.final_project.group_b.model.AStar;
+import edu.miracosta.cs113.final_project.group_b.model.Graph;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
@@ -17,6 +20,9 @@ public class MainController
 	@FXML private Slider		speedSlider;
 	@FXML private Group			groupPane;
 	@FXML private ImageView		imageView;
+	
+	private Graph<Point2D> graph;
+	private AStar<Point2D> pathFinder = new AStar<Point2D>(graph, new Point2D(55, 6), (cur, end) -> 0);
 
 	@FXML
 	private void selectGraph(ActionEvent e)
@@ -42,6 +48,7 @@ public class MainController
 		ToggleButton stepButton = (ToggleButton) e.getSource();
 		stepButton.setSelected(false);
 		System.out.println("D");
+		(new Thread(AStar::step)).start();
 	}
 	
 	@FXML
@@ -63,6 +70,7 @@ public class MainController
 		assert groupPane != null : "fx:id=\"groupPane\" was not injected: check your FXML file 'initial prototype.fxml'.";
 		assert imageView != null : "fx:id=\"imageView\" was not injected: check your FXML file 'initial prototype.fxml'.";
 
-		// TODO initialize the combo boxes
+		pathFinder.sleepProperty().bind(speedSlider.valueProperty());
+		pathFinder.sleepProperty().addListener(e -> System.out.println(pathFinder.getSleep()));
 	}
 }
