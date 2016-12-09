@@ -18,7 +18,7 @@ public class GraphUtility<V> {
 	
 	private Scanner input;
 	private HashMap<String, V> vertices;  // Pairs Vertex objects with ID given in file
-	private Graph<V> graphFromFile;   // Graph constructed from file data
+	private Graph<V> graphFromFile;       // Graph constructed from file data
 	
 	/**
 	 * Constructor for file utility class; initializes data structures.

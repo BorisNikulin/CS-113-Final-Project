@@ -172,6 +172,6 @@ public class Graph<V> {
      * @return A LinkedList of vertices adjacent to target
      */
     public LinkedList<Edge<V>> getEdges(V vertex) {
-    	return edges.get(vertex.hashCode());
+    	return edges.get(vertex);
     }
 }
