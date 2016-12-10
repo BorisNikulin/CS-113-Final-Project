@@ -3,6 +3,8 @@ package edu.miracosta.cs113.final_project.group_b.model.test;
 
 import static org.junit.Assert.*;
 import java.awt.Point;
+import java.util.function.BiFunction;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,10 +16,13 @@ public class GraphTest
 {
 	Graph<Point> testGraph;
 	GraphUtility<Point> graphReader;
+	BiFunction<Integer, Integer, Point> pointSetter;
 	AStar<Point> algorithm;
 
 	/**
 	 * Initializes helper object with text file containing graph info.
+	 * Creates an anonymous method to set points in generic GraphUtility
+	 * class.
 	 * 
 	 * @throws Exception
 	 * 		   If file does not exist
@@ -25,7 +30,14 @@ public class GraphTest
 	@Before
 	public void setUp() throws Exception
 	{
-		graphReader = new GraphUtility<Point>("src\\edu\\miracosta\\cs113\\final_project\\group_b\\model\\test\\test.txt");
+		class PointSetter implements BiFunction<Integer, Integer, Point> {
+			@Override
+			public Point apply(Integer x, Integer y) {
+				return new Point(x, y);
+			}
+		}		
+		pointSetter = new PointSetter();
+		graphReader = new GraphUtility<Point>("src\\edu\\miracosta\\cs113\\final_project\\group_b\\model\\test\\test.txt", pointSetter);
 	}
 	
 	/**
@@ -53,7 +65,7 @@ public class GraphTest
 	public void aStarTest() throws Exception {
 		Point start = new Point(1, 1);
 		Point end = new Point(99, 99);
-		graphReader = new GraphUtility<Point>("src\\edu\\miracosta\\cs113\\final_project\\group_b\\model\\test\\astartest.txt");
+		graphReader = new GraphUtility<Point>("src\\edu\\miracosta\\cs113\\final_project\\group_b\\model\\test\\astartest.txt", pointSetter);
 		testGraph = graphReader.getGraph();
 		algorithm = new AStar<Point>(testGraph, start, end, (a, b) -> Math.abs(a.getX() - b.getX()) +
 				                                                      Math.abs(a.getY() - b.getY()));
