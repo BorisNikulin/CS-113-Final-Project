@@ -1,8 +1,13 @@
 
 package edu.miracosta.cs113.final_project.group_b.controller;
 
+import java.awt.Point;
+import java.io.FileNotFoundException;
+import java.util.function.BiFunction;
+
 import edu.miracosta.cs113.final_project.group_b.model.AStar;
 import edu.miracosta.cs113.final_project.group_b.model.Graph;
+import edu.miracosta.cs113.final_project.group_b.model.GraphUtility;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
@@ -21,8 +26,25 @@ public class MainController
 	@FXML private Group			groupPane;
 	@FXML private ImageView		imageView;
 	
+	private PointSetter pointSetter;
+	private GraphUtility<Point2D> graphReader;
 	private Graph<Point2D> graph;
-	private AStar<Point2D> pathFinder = new AStar<Point2D>(graph, new Point2D(55, 6), (cur, end) -> 0);
+	private AStar<Point2D> pathFinder;
+	
+	class PointSetter implements BiFunction<Integer, Integer, Point2D> {
+		@Override
+		public Point2D apply(Integer x, Integer y) {
+			return new Point2D(x, y);
+		}
+	}
+	
+	public MainController() throws FileNotFoundException {
+		pointSetter = new PointSetter();
+		graphReader = new GraphUtility<Point2D>("src\\edu\\miracosta\\cs113\\final_project\\group_b\\model\\test\\astartest.txt", pointSetter);
+		graph = graphReader.getGraph();
+		pathFinder = new AStar<Point2D>(graph, new Point2D(1, 1), new Point2D(99, 99), (a, b) -> Math.abs(a.getX() - b.getX()) +
+                                                                                                 Math.abs(a.getY() - b.getY()));
+	}
 
 	@FXML
 	private void selectGraph(ActionEvent e)
@@ -39,7 +61,8 @@ public class MainController
 	@FXML
 	private void handleStop(ActionEvent e)
 	{
-		System.out.println("C");
+		System.out.println("Stop");
+		pathFinder.setPlay(false);
 	}
 	
 	@FXML
@@ -47,14 +70,19 @@ public class MainController
 	{
 		ToggleButton stepButton = (ToggleButton) e.getSource();
 		stepButton.setSelected(false);
-		System.out.println("D");
-		(new Thread(AStar::step)).start();
+		System.out.println("Step");
+		pathFinder.step();
+		pathFinder.printPath(new Point2D(99, 99));
+		//(new Thread(AStar::step)).start();
 	}
 	
 	@FXML
 	private void handlePlay(ActionEvent e)
 	{
-		System.out.println("E");
+		System.out.println("Play");
+		pathFinder.setPlay(true);
+		pathFinder.play();
+		pathFinder.printPath(new Point2D(99, 99));
 	}
 
 	@FXML

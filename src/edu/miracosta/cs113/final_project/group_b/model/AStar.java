@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleMapProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 
 /**
  * AStar.java: Creates an AStar object that initializes the data structures
@@ -59,6 +60,8 @@ public class AStar<V> {
 		this.start = new SimpleObjectProperty<V>(this, "start", start);
 		this.goal = new SimpleObjectProperty<V>(this, "goal", goal);
 	
+		timeUnit = TimeUnit.MILLISECONDS;
+		sleep = new SimpleDoubleProperty(this, "sleep", 10000);
 		isPlay = new SimpleBooleanProperty(this, "isPlay", false);
 		costSoFar = new HashMap<V, Double>();
 		cameFrom = new SimpleMapProperty<>(this, "cameFrom", FXCollections.observableHashMap());
@@ -71,19 +74,18 @@ public class AStar<V> {
 	/**
 	 * Performs one "step" of A* algorithm, where an item from the
 	 * frontier is chosen and its adjacent vertices are evaluated.
-	 * Step ends when a new vertex selected to be added to the frontier.
 	 */
 	public void step() {
 		VertexPriority<V> current;                                // Current vertex in frontier being evaluated
 		LinkedList<Edge<V>> adjacentEdges;                        // All edges adjacent to current vertex
 		double newCost, priority;                                 // Calculated cost between current & next; current priority
 		V next;                                                   // Next adjacent vertex to current
-		boolean vertexAdded = false;                              // Flag: has a new vertex been added to path?
 		 
-		while (!frontier.isEmpty() && !vertexAdded) {             // Continue evaluating vertices until one is added to path
+		if (!frontier.isEmpty()) {                                // Do step if there are vertices in frontier
 			current = frontier.poll();                            // Get best new vertex from priority queue
 			
 			if (current.getVertex().equals(goal.get())) {
+				isPlay.set(false);
 				return;                                           // End search early once goal has been reached
 			}
 
@@ -100,10 +102,23 @@ public class AStar<V> {
 					priority = newCost + heuristic.applyAsDouble(goal.get(), next);					
 					frontier.offer(new VertexPriority<V>(next, priority));
 					cameFrom.get().put(next, current.getVertex()); // Record next vertex's predecessor (current vertex)
-					vertexAdded = true;                            // Now step will end after rest of adjacent vertices evaluated
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Continuous play version of algorithm; moves through steps until
+	 * goal is reached (then isPlay is set to false, ending method).
+	 */
+	public void play() {
+		int i = 0;
+		while (isPlay.get() && i < 50) {   // Check if still playing, if so:
+			step();              // Do a step of algorithm
+			goToSleep();         // Pause for time specified by user
+			i++;
+		}
+		System.out.println("Done playing");
 	}
 	
 	/**
@@ -154,16 +169,17 @@ public class AStar<V> {
 	public void printPath(V goal) {
 		V next;
 		Stack<V> path = new Stack<V>();
-		next = cameFrom.get(goal);
+		next = cameFrom.get().get(goal);
 		System.out.println("Total path length: " + costSoFar.get(goal) + "\n");
 		while (next != null) {
 			path.push(next);
-			next = cameFrom.get(next);
+			next = cameFrom.get().get(next);
 		}
 		while (!path.empty()) {
 			System.out.print(path.pop() + " --> ");
 		}
 		System.out.print(goal);
+		System.out.println("\n");
 	}
 	
 	/**
@@ -174,9 +190,7 @@ public class AStar<V> {
 	 * @param unit
 	 *        Specifies the unit of measurement (seconds, etc.)
 	 */
-	public void goToSleep(double time, TimeUnit unit) {
-		timeUnit = unit;
-		sleep = new SimpleDoubleProperty(this, "sleep", time);
+	public void goToSleep() {
 		try {
 			Thread.sleep(timeUnit.toMillis((long) sleep.get()));
 		}
@@ -190,8 +204,7 @@ public class AStar<V> {
 	 * 
 	 * @return Sleep property object
 	 */
-	public DoubleProperty sleepProperty()
-	{
+	public DoubleProperty sleepProperty() {
 		return sleep;
 	}
 	
@@ -200,8 +213,7 @@ public class AStar<V> {
 	 * 
 	 * @return Sleep as a double
 	 */
-	public final double getSleep()
-	{
+	public final double getSleep() {
 		return sleep.doubleValue();
 	}
 	
@@ -211,8 +223,43 @@ public class AStar<V> {
 	 * @param value
 	 *        Number of time units to sleep.
 	 */
-	public final void setDouble(double value)
-	{
+	public final void setSleep(double value) {
 		sleep.set(value);
+	}
+	
+	public BooleanProperty playProperty() {
+		return isPlay;
+	}
+	
+	public final boolean getPlay() {
+		return isPlay.get();
+	}
+	
+	public void setPlay(boolean value) {
+		isPlay.set(value);
+	}
+	
+	public MapProperty<V, V> pathMapProperty() {
+		return cameFrom;
+	}
+	
+	public ObservableMap<V, V> getPathMap() {
+		return cameFrom.get();
+	}
+	
+	public ReadOnlyObjectProperty<V> getStartProperty() {
+		return start;
+	}
+	
+	public ReadOnlyObjectProperty<V> getGoalProperty() {
+		return goal;
+	}
+	
+	public V getStart() {
+		return start.getValue();
+	}
+	
+	public V getGoal() {
+		return goal.getValue();
 	}
 }
