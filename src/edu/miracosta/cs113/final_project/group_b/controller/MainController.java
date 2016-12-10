@@ -25,38 +25,70 @@ public class MainController
 	@FXML private Group			groupPane;
 	@FXML private ImageView		imageView;
 	
-	private PointSetter pointSetter;
 	private GraphUtility<Point2D> graphReader;
 	private Graph<Point2D> graph;
 	private AStar<Point2D> pathFinder;
+	private Point2D start;  // TODO: Set method
+ 	private Point2D goal;   // TODO: Set method
 	
-	class PointSetter implements BiFunction<Integer, Integer, Point2D> {
-		@Override
-		public Point2D apply(Integer x, Integer y) {
-			return new Point2D(x, y);
+ 	/**
+ 	 * Creates algorithm object with specified graph, start & end point, and
+ 	 * heuristic function for finding path.
+ 	 */
+	public void setAlgorithm() {
+		// TODO: In future, if we have more algorithms: include branching/option
+		pathFinder = new AStar<Point2D>(graph, start, goal, (a, b) -> Math.abs(a.getX() - b.getX()) +
+                                                                      Math.abs(a.getY() - b.getY()));
+		pathFinder.sleepProperty().bind(speedSlider.valueProperty());
+		pathFinder.sleepProperty().addListener(e -> System.out.println(pathFinder.getSleep()));
+		// TODO: Bind other properties?
+	}
+	
+	/**
+	 * Reads graph from given file and creates graph object with data.
+	 * Defines and uses PointSetter class (a BiFunction subclass) to
+	 * give coordinates from file to vertices.
+	 * 
+	 * @param fileName
+	 *        Name of file containing map data
+	 * @throws FileNotFoundException
+	 *         If path to file cannot be found
+	 */
+	public void setGraph(String fileName) throws FileNotFoundException {
+		class PointSetter implements BiFunction<Integer, Integer, Point2D> {
+			@Override
+			public Point2D apply(Integer x, Integer y) {
+				return new Point2D(x, y);
+			}
 		}
+		PointSetter pointSetter = new PointSetter();
+		graphReader = new GraphUtility<Point2D>(fileName, pointSetter);
+		graph = graphReader.getGraph();
 	}
 	
-	// TODO: Set this info elsewhere (separate methods?)
-	public MainController() throws FileNotFoundException {
-		pointSetter = new PointSetter();
-		graphReader = new GraphUtility<Point2D>("src\\edu\\miracosta\\cs113\\final_project\\group_b\\model\\test\\astartest.txt", pointSetter);
-		graph = graphReader.getGraph();
-		pathFinder = new AStar<Point2D>(graph, new Point2D(1, 1), new Point2D(99, 99), (a, b) -> Math.abs(a.getX() - b.getX()) +
-                                                                                                 Math.abs(a.getY() - b.getY()));
-	}
-
 	@FXML
 	private void selectGraph(ActionEvent e)
 	{
-		System.out.println("A");
-		// TODO: Set graph based on selected item in combo box
+		String graphName;
+		StringBuilder fileName;
+		graphName = graphPicker.getValue().toString();
+		fileName = new StringBuilder(graphName);
+		fileName.append(".txt");
+		// TODO: Insert directory in front of file name
+		try {
+			setGraph(fileName.toString());
+		}
+		catch (FileNotFoundException exception) {
+			System.out.println("Graph file not found!");
+		}
+		// TODO: Fetch matching image file & give to View
 	}
 	
 	@FXML
 	private void selectAlgorithm(ActionEvent e)
 	{
-		System.out.println("B");
+		// TODO: In future, if we have more algorithms: get selection from combo box
+		setAlgorithm();
 	}
 	
 	@FXML
@@ -74,7 +106,7 @@ public class MainController
 		System.out.println("Step");
 		pathFinder.step();
 		pathFinder.printPath(new Point2D(99, 99));
-		// TODO: View implementation of step (draw path & highlight next vertex?)
+		// TODO: View implementation (draw path & highlight next vertex?)
 		// TODO: Get thread/sleep to work (may be necessary to change in AStar class)
 		// (new Thread(AStar::step)).start();
 	}
@@ -86,7 +118,7 @@ public class MainController
 		pathFinder.setPlay(true);
 		pathFinder.play();
 		pathFinder.printPath(new Point2D(99, 99));
-		// TODO: View implementation (draw path)
+		// TODO: View implementation (same as step but continuous)
 	}
 
 	@FXML
@@ -101,9 +133,5 @@ public class MainController
 		// assert playButton != null : "fx:id=\"playButton\" was not injected: check your FXML file 'initial prototype.fxml'.";
 		assert groupPane != null : "fx:id=\"groupPane\" was not injected: check your FXML file 'initial prototype.fxml'.";
 		assert imageView != null : "fx:id=\"imageView\" was not injected: check your FXML file 'initial prototype.fxml'.";
-
-		pathFinder.sleepProperty().bind(speedSlider.valueProperty());
-		pathFinder.sleepProperty().addListener(e -> System.out.println(pathFinder.getSleep()));
-		// TODO: Bind other properties?
 	}
 }
