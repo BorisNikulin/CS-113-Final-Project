@@ -1,7 +1,6 @@
 
 package edu.miracosta.cs113.final_project.group_b.controller;
 
-import java.awt.Point;
 import java.io.FileNotFoundException;
 import java.util.function.BiFunction;
 
@@ -38,6 +37,7 @@ public class MainController
 		}
 	}
 	
+	// TODO: Set this info elsewhere (separate methods?)
 	public MainController() throws FileNotFoundException {
 		pointSetter = new PointSetter();
 		graphReader = new GraphUtility<Point2D>("src\\edu\\miracosta\\cs113\\final_project\\group_b\\model\\test\\astartest.txt", pointSetter);
@@ -50,6 +50,7 @@ public class MainController
 	private void selectGraph(ActionEvent e)
 	{
 		System.out.println("A");
+		// TODO: Set graph based on selected item in combo box
 	}
 	
 	@FXML
@@ -73,7 +74,9 @@ public class MainController
 		System.out.println("Step");
 		pathFinder.step();
 		pathFinder.printPath(new Point2D(99, 99));
-		//(new Thread(AStar::step)).start();
+		// TODO: View implementation of step (draw path & highlight next vertex?)
+		// TODO: Get thread/sleep to work (may be necessary to change in AStar class)
+		// (new Thread(AStar::step)).start();
 	}
 	
 	@FXML
@@ -83,6 +86,7 @@ public class MainController
 		pathFinder.setPlay(true);
 		pathFinder.play();
 		pathFinder.printPath(new Point2D(99, 99));
+		// TODO: View implementation (draw path)
 	}
 
 	@FXML
@@ -100,5 +104,6 @@ public class MainController
 
 		pathFinder.sleepProperty().bind(speedSlider.valueProperty());
 		pathFinder.sleepProperty().addListener(e -> System.out.println(pathFinder.getSleep()));
+		// TODO: Bind other properties?
 	}
 }

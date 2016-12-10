@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.function.BiFunction;
-import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 

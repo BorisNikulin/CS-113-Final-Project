@@ -25,6 +25,7 @@ public class Main extends Application
 	{
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("view/Main.fxml"));
 		MainController controller = loader.getController();
+		// TODO: Initialize controller variables (Graph & AStar objects, etc.)
 		// Graph<Point2D> graph = new Graph<Point2D>();
 		// controller.setAStar(new AStar<V>());
 		// controller.setGraph(new Graph<V>());
