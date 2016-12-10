@@ -3,6 +3,7 @@ package edu.miracosta.cs113.final_project.group_b.model;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.function.BiFunction;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,6 +20,7 @@ public class GraphUtility<V> {
 	private Scanner input;
 	private HashMap<String, V> vertices;  // Pairs Vertex objects with ID given in file
 	private Graph<V> graphFromFile;       // Graph constructed from file data
+	private BiFunction<Integer, Integer, V> setVertex;
 	
 	/**
 	 * Constructor for file utility class; initializes data structures.
@@ -28,7 +30,9 @@ public class GraphUtility<V> {
 	 * @throws FileNotFoundException
 	 *          If file name is invalid
 	 */
-	public GraphUtility(String fileName) throws FileNotFoundException {
+	public GraphUtility(String fileName, BiFunction<Integer, Integer, V> setVertex)
+			                                         throws FileNotFoundException {
+		this.setVertex = setVertex;
 		graphFromFile = new Graph<V>();
 		input = new Scanner(new File(fileName));
 		vertices = new HashMap<String, V>();
@@ -55,13 +59,11 @@ public class GraphUtility<V> {
 	 * @throws InputMismatchException
 	 *         If data is in wrong format & coordinates cannot be parsed
 	 */
-	@SuppressWarnings("unchecked")
 	private void parseVertices() throws InputMismatchException {
 		String vertexID, rawData;
 		String[] part, coordinate;
-		Point vertex;                             // TODO: Generic implementation?
+		V vertex;
 		while (input.hasNextLine()) {
-			vertex = new Point();
 			rawData = input.nextLine();           // Gets line like: "A: 2,3"
 			if (rawData.isEmpty()) {              // End method when blank line is reached
 				return;
@@ -69,8 +71,8 @@ public class GraphUtility<V> {
 			part = rawData.split(" ");            // Separate vertex ID & coordinates
 			vertexID = part[0].replace(":", "");  // Remove excess character
 			coordinate = part[1].split(",");      // Get x & y coordinate
-			                                      // TODO: Generic implementation?
-			vertex.setLocation(Integer.parseInt(coordinate[0]), Integer.parseInt(coordinate[1])); 
+			                                      // Given BiFunction sets takes coordinates & returns set object
+			vertex = setVertex.apply(Integer.parseInt(coordinate[0]), Integer.parseInt(coordinate[1])); 
 			vertices.put(vertexID, (V) vertex);   // Map ID to vertex
 			graphFromFile.addVertex((V) vertex);  // Insert vertex into graph
 		}
