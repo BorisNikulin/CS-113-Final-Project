@@ -27,7 +27,7 @@ import javafx.collections.ObservableMap;
  * 
  * @author Marina Mizar
  */
-public class AStar<V> {
+public class AStar<V> implements Algorithm<V> {
 	
 	private PriorityQueue<VertexPriority<V>> frontier; // Vertices not yet evaluated
 	private Map<V, Double> costSoFar;                  // Pairs vertices with their total path costs from start
@@ -107,14 +107,6 @@ public class AStar<V> {
 			}
 		}
 		return added;
-	}
-	
-	/**
-	 * Continuous play version of algorithm; moves through steps until
-	 * goal is reached (then isPlay is set to false, ending method).
-	 */
-	public void play() {
-		
 	}
 	
 	/**

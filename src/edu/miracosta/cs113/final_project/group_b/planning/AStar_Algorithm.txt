@@ -1,0 +1,30 @@
+/**
+ *  @author: Marina Mizar
+ */
+
+	AStar Algorithm/Pseudocode:
+	
+	Create a priority queue to hold unvisited vertices & their f(n) values (frontier)
+	Create a Map to hold current-to-predecessor relationships (p)
+	Create a Map to hold vertex-to-cost relationships (c)
+	Initialize frontier with starting values (starting vertex, 0)
+	Initialize p with (start, null)
+	Initialize c with (start, 0)
+	
+	Given start vertex, goal vertex & graph...
+	
+	While frontier is not empty:
+	
+	- get first vertex from frontier (current)
+	- if current = goal, stop
+	- for all vertices adjacent to current (next):
+	    - let new cost = c(current) + edge weight between current & next
+	    - if new cost < c(next) or c(next) doesn't exist yet:
+	        - let c[next] = new cost
+	        - calculate f(n) value: new cost + estimated distance between goal & next calculated by heuristic*
+	        - put pair of values (f(n), next) in frontier
+	        - let p(next) = current
+	
+	Finally, using p & c, construct least costly path (go from last predecessor to last predecessor until start is reached)
+	
+	*Heuristic: abs(nextX - goalX) + abs(nextY - goalY)

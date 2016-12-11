@@ -41,7 +41,7 @@ public class GraphTest
 			}
 		}		
 		pointSetter = new PointSetter();
-		graphReader = new GraphUtility<Point>("C:\\Users\\W7104673\\Desktop\\pokemap.txt", pointSetter);
+		graphReader = new GraphUtility<Point>("src/edu/miracosta/cs113/final_project/group_b/model/test/pokemap.txt", pointSetter);
 	}
 	
 	/**

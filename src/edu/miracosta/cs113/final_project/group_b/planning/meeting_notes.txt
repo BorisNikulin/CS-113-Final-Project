@@ -1,0 +1,26 @@
+/**
+ * @author Marina Mizar
+ */
+
+Meeting notes (12/09/2016):
+
+	      Main -> Initializes components
+	Controller -> Listens for events & calls view methods
+	      View -> Changes images based on controller property bindings
+
+	handleStep() calls pathfinder.step()
+	handlePlay() calls pathFinder.play()
+		- call step
+		- call sleep/pause
+		- check if goal is reached/boolean is false
+		- loop
+	handleStop() changes isPlay boolean
+	
+	TODO:
+		- Create sequence diagram for controller
+		- Make GraphUtility generic (add function interface to get coordinates)
+		- Finish testing class
+		- Add lines to view for each edge added
+		- Change AStar path finding method to step() (while -> if)
+		- Create connection to view in controller
+		- Initialize controller in main
