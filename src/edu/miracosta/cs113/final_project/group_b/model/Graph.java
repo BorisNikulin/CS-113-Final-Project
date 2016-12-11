@@ -12,6 +12,7 @@ import java.util.HashMap;
  */
 
 import java.util.LinkedList;
+import java.util.Set;
 
 public class Graph<V> {
      
@@ -183,5 +184,9 @@ public class Graph<V> {
      */
     public LinkedList<Edge<V>> getEdges(V vertex) {
     	return edges.get(vertex);
+    }
+    
+    public Set<V> getVertices() {
+    	return edges.keySet();
     }
 }

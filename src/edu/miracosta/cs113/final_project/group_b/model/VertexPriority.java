@@ -56,10 +56,10 @@ public class VertexPriority<V> implements Comparable<VertexPriority<V>> {
 	@Override
 	public int compareTo(VertexPriority<V> other) {
 		if (this.priority > other.priority) {
-			return -1;
+			return 1;
 		}
 		else if (this.priority < other.priority) {
-			return 1;
+			return -1;
 		}
 		
 		return 0;

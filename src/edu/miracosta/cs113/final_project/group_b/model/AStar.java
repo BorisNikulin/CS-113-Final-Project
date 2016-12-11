@@ -75,18 +75,19 @@ public class AStar<V> {
 	 * Performs one "step" of A* algorithm, where an item from the
 	 * frontier is chosen and its adjacent vertices are evaluated.
 	 */
-	public void step() {
+	public V step() {
 		VertexPriority<V> current;                                // Current vertex in frontier being evaluated
 		LinkedList<Edge<V>> adjacentEdges;                        // All edges adjacent to current vertex
 		double newCost, priority;                                 // Calculated cost between current & next; current priority
 		V next;                                                   // Next adjacent vertex to current
-		 
+		V added = null;
 		if (!frontier.isEmpty()) {                                // Do step if there are vertices in frontier
 			current = frontier.poll();                            // Get best new vertex from priority queue
+			added = current.getVertex();
 			
 			if (current.getVertex().equals(goal.get())) {
 				isPlay.set(false);
-				return;                                           // End search early once goal has been reached
+				return goal.get();                                // End search early once goal has been reached
 			}
 
 			adjacentEdges = graph.getEdges(current.getVertex());
@@ -99,12 +100,13 @@ public class AStar<V> {
 					newCost < costSoFar.get(next)) {               // Or new calculated cost is smaller
 					costSoFar.put(next, newCost);                  // Replace cost with newer, smaller cost
 					                                               // Calculate priority for next vertex, add to frontier
-					priority = newCost + heuristic.applyAsDouble(goal.get(), next);					
+					priority = newCost + heuristic.applyAsDouble(goal.get(), next);	
 					frontier.offer(new VertexPriority<V>(next, priority));
 					cameFrom.get().put(next, current.getVertex()); // Record next vertex's predecessor (current vertex)
 				}
 			}
 		}
+		return added;
 	}
 	
 	/**
@@ -112,13 +114,7 @@ public class AStar<V> {
 	 * goal is reached (then isPlay is set to false, ending method).
 	 */
 	public void play() {
-		int i = 0;
-		while (isPlay.get() && i < 50) {   // Check if still playing, if so:
-			step();              // Do a step of algorithm
-			goToSleep();         // Pause for time specified by user
-			i++;
-		}
-		System.out.println("Done playing");
+		
 	}
 	
 	/**
@@ -166,20 +162,32 @@ public class AStar<V> {
 	 * @param goal
 	 *        End point of path
 	 */
-	public void printPath(V goal) {
-		V next;
-		Stack<V> path = new Stack<V>();
-		next = cameFrom.get().get(goal);
-		System.out.println("Total path length: " + costSoFar.get(goal) + "\n");
-		while (next != null) {
-			path.push(next);
-			next = cameFrom.get().get(next);
-		}
+	public void printPath() {
+		Stack<V> path = pathStack();
 		while (!path.empty()) {
 			System.out.print(path.pop() + " --> ");
 		}
 		System.out.print(goal);
 		System.out.println("\n");
+	}
+	
+	/**
+	 * Constructs the path from goal to start by tracing back predecessors in
+	 * cameFrom mappings.
+	 * 
+	 * @return A Stack with vertices that can be popped in order from start to
+	 *         goal.
+	 */
+	public Stack<V> pathStack() {
+		V next;
+		Stack<V> path = new Stack<V>();
+		next = cameFrom.get().get(goal.get());
+		System.out.println("Total path length: " + costSoFar.get(goal.get()) + "\n");
+		while (next != null) {
+			path.push(next);
+			next = cameFrom.get().get(next);
+		}
+		return path;
 	}
 	
 	/**
@@ -199,30 +207,18 @@ public class AStar<V> {
 		}
 	}
 	
-	/**
-	 * Property wrapper for sleep amount; used in controller.
-	 * 
-	 * @return Sleep property object
-	 */
+	//////////////////////////////////////////////////////////////////////////
+	//               SETTERS FOR BINDINGS & PROPERTIES                      //
+	//////////////////////////////////////////////////////////////////////////
+	
 	public DoubleProperty sleepProperty() {
 		return sleep;
 	}
 	
-	/**
-	 * Gets sleep value as a double.
-	 * 
-	 * @return Sleep as a double
-	 */
 	public final double getSleep() {
 		return sleep.doubleValue();
 	}
 	
-	/**
-	 * Sets sleep to specified double value.
-	 * 
-	 * @param value
-	 *        Number of time units to sleep.
-	 */
 	public final void setSleep(double value) {
 		sleep.set(value);
 	}
