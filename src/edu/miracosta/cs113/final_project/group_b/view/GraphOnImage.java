@@ -84,7 +84,7 @@ public class GraphOnImage extends StackPane
 	{
 		imageView.imageProperty().addListener(e -> initBounds.set(imageView.getBoundsInLocal()));
 
-		imageView.setImage(new Image("file:/C:/Users/W7104673/Desktop/pokemonMap.jpg"));
+		imageView.setImage(new Image("https://s23.postimg.org/hzn4yy6ih/pokemon_Map.jpg"));
 
 		DoubleBinding widthRatioBinding = new DoubleBinding()
 		{
@@ -215,7 +215,7 @@ public class GraphOnImage extends StackPane
 		circle.centerYProperty().bind((createVerticalFixation(src.getY())));
 		
 		// If you want to use little creature for animation:
-		monster = new ImageView(new Image("File:/C:/Users/W7104673/git/2653_groupB/src/edu/miracosta/cs113/final_project/group_b/view/jolteon.gif"));
+		monster = new ImageView(new Image("https://s23.postimg.org/3rxgaattn/jolteon.gif"));
 	    monster.setPreserveRatio(true);
 	    if (src.getX() - dest.getX() < 0) {                               // If path is moving to right
 	    	monster.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);    // Left-facing image must be mirrored
