@@ -173,6 +173,7 @@ public class MainController
 	private void animateStep() {
 		Point2D vertex = pathFinder.step();
 		if (goalReached) {                                       // If goal has been found, end early
+			view.finishAnimation();                              // Remove animation
 			return;
 		}
 		if (last == goal) {                                      // If last vertex was goal:
@@ -186,6 +187,7 @@ public class MainController
 				}
 				last = prev;
 			}
+			view.animatePath(start, goal);                       // Start animation that walks path
 			goalReached = true;                                  // Set boolean flag
 			return;
 		}
