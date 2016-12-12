@@ -30,7 +30,7 @@ public class Main extends Application
 		MainController controller = loader.getController();                                     // Gets MainController from FXML
 		controller.setGraph("src/edu/miracosta/cs113/final_project/group_b/view/pokemap.txt");  // Sets graph from specified text file
 		controller.setStart(new Point2D(100,600));                                              // Sets default starting point
-		controller.setGoal(new Point2D(1000,300));                                              // Sets default goal of path
+		controller.setGoal(new Point2D(820,580));                                              // Sets default goal of path
 		controller.setAlgorithm();                                                              // Initializes algorithm
 		
 		primaryStage.setScene(new Scene(root));
