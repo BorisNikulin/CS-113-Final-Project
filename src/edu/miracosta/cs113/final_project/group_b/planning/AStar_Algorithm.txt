@@ -1,6 +1,5 @@
 /**
- *  @author: Marina Mizar
- *  [From A* algorithm by Amit Patel @ Red Blob Games]
+ *  [Based on A* algorithm by Amit Patel @ Red Blob Games]
  */
 
 	AStar Algorithm/Pseudocode:
