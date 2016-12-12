@@ -1,5 +1,6 @@
 /**
  *  @author: Marina Mizar
+ *  [From A* algorithm by Amit Patel @ Red Blob Games]
  */
 
 	AStar Algorithm/Pseudocode:
@@ -27,4 +28,4 @@
 	
 	Finally, using p & c, construct least costly path (go from last predecessor to last predecessor until start is reached)
 	
-	*Heuristic: abs(nextX - goalX) + abs(nextY - goalY)
+	*Heuristic: abs(nextX - goalX) + abs(nextY - goalY) (Manhattan Formula)
